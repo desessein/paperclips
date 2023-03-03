@@ -1,10 +1,20 @@
 {
   "name": "desessein-generator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prebuild": "npm run cleanup:generated",
+    "build": "tsc --project tsconfig.build.json",
+    "format": "prettier --write \"{src,test}/**/*.{js,ts}\"",
+    "prelint": "npm run format -- --loglevel error",
+    "lint": "eslint \"{src,test}/**/*.{js,ts}\" --fix",
+    "pretest": "npm run lint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "cleanup:generated": "rimraf src/@generated",
+    "pregenerate": "npm run cleanup:generated",
+    "generate": "npx prisma generate && npm run format -- --loglevel error"
   },
   "dependencies": {
     "@prisma/client": "^3.15.2",
@@ -26,6 +36,7 @@
     "jest": "^27.2.4",
     "prettier": "^2.4.1",
     "prisma": "^3.2.1",
+    "prisma-generator-nestjs-dto": "^1.1.4",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
